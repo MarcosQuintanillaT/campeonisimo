@@ -9,28 +9,7 @@ const ASIGNATURAS = {
 
 // Preguntas por asignatura
 const PREGUNTAS_DEFAULT = {
-    "matematicas": [
-        {
-            "pregunta": "¿Cuánto es 15 × 8?",
-            "opciones": [
-                "110",
-                "120",
-                "125",
-                "130"
-            ],
-            "correcta": 2
-        },
-        {
-            "pregunta": "dos mas dos",
-            "opciones": [
-                "1",
-                "4",
-                "2",
-                "3"
-            ],
-            "correcta": 1
-        }
-    ],
+    "matematicas": [],
     "espanol": [],
     "sociales": [],
     "naturales": [],
