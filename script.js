@@ -38,6 +38,7 @@ const PREGUNTAS_DEFAULT = {
 };
 
 // ====== ESTADO DEL JUEGO ======
+const NUBE_URL = 'https://jsonblob.com/api/jsonBlob/019d368d-ce0d-7549-80cc-769292b08947';
 let preguntas = {};
 let editorAsignatura = null;
 let juego = {
@@ -252,40 +253,48 @@ function mostrarMensajeMejorar() {
 }
 
 function inicializar() {
-    cargarPreguntas();
-    cargarPuntajes();
-    agregarSonidosBotones();
+    cargarPreguntas().then(() => {
+        cargarPuntajes();
+        agregarSonidosBotones();
+    });
 }
 
-// Guardar/cargar preguntas del localStorage
+// Guardar/cargar preguntas
 function cargarPreguntas() {
-    const guardadas = localStorage.getItem('campeonisimo_preguntas');
-    if (guardadas) {
-        preguntas = JSON.parse(guardadas);
-    } else {
-        preguntas = JSON.parse(JSON.stringify(PREGUNTAS_DEFAULT));
-        guardarPreguntas();
-    }
+    return fetch(NUBE_URL)
+        .then(res => res.json())
+        .then(data => {
+            preguntas = data;
+            localStorage.setItem('campeonisimo_preguntas', JSON.stringify(preguntas));
+            console.log('Preguntas cargadas desde la nube');
+        })
+        .catch(() => {
+            const guardadas = localStorage.getItem('campeonisimo_preguntas');
+            if (guardadas) {
+                preguntas = JSON.parse(guardadas);
+            } else {
+                preguntas = JSON.parse(JSON.stringify(PREGUNTAS_DEFAULT));
+            }
+            console.log('Preguntas cargadas desde localStorage (sin conexion)');
+        });
 }
 
 function guardarPreguntas() {
     localStorage.setItem('campeonisimo_preguntas', JSON.stringify(preguntas));
-    guardarEnArchivo();
-}
-
-function guardarEnArchivo() {
-    fetch('guardar_preguntas.php', {
-        method: 'POST',
+    fetch(NUBE_URL, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ preguntas: preguntas })
+        body: JSON.stringify(preguntas)
     })
     .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Guardado en script.js');
-        }
+    .then(() => {
+        console.log('Preguntas guardadas en la nube');
+        mostrarToast('Preguntas guardadas');
     })
-    .catch(err => console.log('Error al guardar:', err));
+    .catch(() => {
+        console.log('Error al guardar en la nube, guardado solo local');
+        mostrarToast('Guardado localmente (sin conexion)');
+    });
 }
 
 // ====== NAVEGACIÓN ======
@@ -374,7 +383,12 @@ function eliminarPregunta(indice) {
 
 // ====== CAMPEONATO ======
 function iniciarCampeonato() {
-    cargarPreguntas();
+    cargarPreguntas().then(() => {
+        iniciarCampeonatoInterno();
+    });
+}
+
+function iniciarCampeonatoInterno() {
 
     const checks = document.querySelectorAll('.asignatura-check input:checked');
     const asignaturasSeleccionadas = Array.from(checks).map(c => c.value);
