@@ -19,6 +19,16 @@ const PREGUNTAS_DEFAULT = {
                 "130"
             ],
             "correcta": 2
+        },
+        {
+            "pregunta": "dos mas dos",
+            "opciones": [
+                "1",
+                "4",
+                "2",
+                "3"
+            ],
+            "correcta": 1
         }
     ],
     "espanol": [],
