@@ -1,8 +1,5 @@
 {
-    "matematicas": [
-        {"pregunta": "lados del triangulo", "opciones": ["3", "5", "2", "4"], "correcta": 0},
-        {"pregunta": "15 por 8", "opciones": ["110", "120", "125", "130"], "correcta": 1}
-    ],
+    "matematicas": [],
     "espanol": [],
     "sociales": [],
     "naturales": [],
