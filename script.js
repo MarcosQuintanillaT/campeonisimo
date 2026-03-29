@@ -1129,7 +1129,6 @@ function reiniciarPuntajes() {
         headers: SUPABASE_HEADERS
     })
         .then(() => {
-            localStorage.removeItem('campeonisimo_preguntas');
             localStorage.removeItem('campeonisimo_puntajes');
             cerrarModal();
             mostrarPuntajes();
@@ -1167,14 +1166,6 @@ function cerrarModal() {
         overlay.classList.remove('mostrar');
         setTimeout(() => overlay.remove(), 300);
     }
-}
-
-function reiniciarPuntajes() {
-    localStorage.removeItem('campeonisimo_puntajes');
-    cerrarModal();
-    mostrarPuntajes();
-    mostrarToast('Puntajes eliminados');
-    reproducirSonido('click');
 }
 
 // ====== UTILIDADES ======
